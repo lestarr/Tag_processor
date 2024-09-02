@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field
-from typing import List, Optional
+from pydantic import BaseModel, Field, field_validator
+from typing import List, Optional, ClassVar
 
 
 class TagsV(BaseModel):
@@ -45,3 +45,17 @@ class TagsV(BaseModel):
             'age_group': self.age_group,
             'tags': self.tags
         }
+    
+class SynonymResult(BaseModel):
+    synonym: Optional[str] = Field(None, description="Word or phrase that has a very close meaning to the original tag and could be interchanged in the most contexts or None otherwise if no synonym exists")
+    existing_tags: ClassVar[List[str]] = []
+    tag_type: ClassVar[str] = ''
+
+    @field_validator('synonym')
+    @classmethod
+    def validate_synonym(cls, v):
+        if v is not None and v != 'None':
+            if v not in cls.existing_tags:
+                print(f"Warning: Synonym '{v}' is not in the list of existing tags for {cls.tag_type}: {cls.existing_tags}")
+                return None
+        return v
