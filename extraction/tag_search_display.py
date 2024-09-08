@@ -81,4 +81,6 @@ def main(tag_freq_json, tag_to_books_json):
     display(main_layout)
 
 if __name__ == "__main__":
-    main()
+    tag_freq_json = 'cache/display_tags/tag_frequency.json'
+    tag_to_books_json = 'cache/display_tags/tag_to_books.json'
+    main(tag_freq_json, tag_to_books_json)
